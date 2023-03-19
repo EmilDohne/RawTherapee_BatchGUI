@@ -1,3 +1,11 @@
+'''
+Copyright (c) 2023, Emil Dohne
+All rights reserved.
+
+This source code is licensed under the BSD-style license found in the
+LICENSE file in the root directory of this source tree. 
+'''
+
 import os
 
 import src.util.logger as logger

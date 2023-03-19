@@ -1,4 +1,12 @@
 '''
+Copyright (c) 2023, Emil Dohne
+All rights reserved.
+
+This source code is licensed under the BSD-style license found in the
+LICENSE file in the root directory of this source tree. 
+'''
+
+'''
 Logic for getting the latest version of RawTherapee and then running the cli executable in it with the appropriate arguments
 '''
 import subprocess
