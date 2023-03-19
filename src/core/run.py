@@ -42,7 +42,7 @@ class RawtherapeeWorker(QtCore.QThread):
                                         self.path_map[key],
                                         "-p",
                                         self.processing_profile,
-                                        "-tz",
+                                        "-t",
                                         "-Y",
                                         "-f",
                                         "-c",
@@ -51,7 +51,7 @@ class RawtherapeeWorker(QtCore.QThread):
                 subprocess_call_list = [self.rawtherapee_install,
                                         "-o",
                                         self.path_map[key],
-                                        "-tz",
+                                        "-t",
                                         "-Y",
                                         "-f",
                                         "-c",
@@ -76,7 +76,7 @@ def rawtherapee_cli(path_map: dict[str], processing_profile: str) -> Rawtherapee
     # TODO this does not actually only process raw files, but all supported files
     '''
     Initiates a subprocess for each path pair in path_map with the processing profile if valid.
-    Currently only writes out as zip compressed 16bit Tiffs, 
+    Currently only writes out as uncompressed 16bit Tiffs, 
     #TODO add the ability to modify this
     '''
     has_processing_profile = True

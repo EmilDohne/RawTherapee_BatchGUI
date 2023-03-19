@@ -12,6 +12,7 @@ from PySide6 import QtWidgets, QtCore, QtUiTools, QtGui
 import src.core.generate_directories as crawl_dir
 import src.core.run as run
 import src.gui.ui_helper as ui_helper
+import src.util.logger as logger
 import main
 
 # Holds a reference to the main UI instance
@@ -130,8 +131,22 @@ class MainUI(QtWidgets.QWidget):
 
 
     def run(self):
+        if not os.path.isdir(self._input_folder):
+            logger.log_error("Input folder specified is not a valid directory")
+            return
+        
+        # Crawl the input directory for folders containing raw image files
         crawled_dirs = crawl_dir.crawl(self._input_folder, self._raw_file_format)
+
+        if len(crawled_dirs) == 0:
+            logger.log_error("No folders containing {0} files found in {1}".format(self._raw_file_format, self._input_folder))
+            return
+        if not os.path.isdir(self._output_folder):
+            logger.log_error("Output folder specified is not a valid directory")
+            return
+        
         dir_mapping = crawl_dir.create_output_map(crawled_dirs, self._output_folder, self._create_subfolder)
+
         # Update progress bar
         self.ui.progressLabel.setText("0/{}".format(len(dir_mapping)))
         self.ui.progressBar.setMaximum(len(dir_mapping))
