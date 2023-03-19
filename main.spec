@@ -28,7 +28,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name='RawTherapee_Batch v0.1.0',
+    name='RawTherapee_Batch v0.1.1',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
