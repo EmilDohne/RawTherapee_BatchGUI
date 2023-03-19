@@ -137,6 +137,7 @@ class Ui_Form(object):
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.addFolderCheckBox.sizePolicy().hasHeightForWidth())
         self.addFolderCheckBox.setSizePolicy(sizePolicy1)
+        self.addFolderCheckBox.setChecked(True)
 
         self.horizontalLayout.addWidget(self.addFolderCheckBox)
 
@@ -294,27 +295,19 @@ class Ui_Form(object):
 
         self.mainLayoutInner.addLayout(self.progressHLayout)
 
-        self.verticalSpacer_8 = QSpacerItem(20, 5, QSizePolicy.Minimum, QSizePolicy.Fixed)
-
-        self.mainLayoutInner.addItem(self.verticalSpacer_8)
-
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.horizontalLayout_2.setContentsMargins(-1, -1, -1, 0)
-        self.label_6 = QLabel(Form)
-        self.label_6.setObjectName(u"label_6")
-
-        self.horizontalLayout_2.addWidget(self.label_6)
-
         self.sysOutLabel = QLabel(Form)
         self.sysOutLabel.setObjectName(u"sysOutLabel")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        sizePolicy3 = QSizePolicy(QSizePolicy.Ignored, QSizePolicy.Preferred)
         sizePolicy3.setHorizontalStretch(0)
         sizePolicy3.setVerticalStretch(0)
         sizePolicy3.setHeightForWidth(self.sysOutLabel.sizePolicy().hasHeightForWidth())
         self.sysOutLabel.setSizePolicy(sizePolicy3)
-        self.sysOutLabel.setMinimumSize(QSize(150, 25))
-        self.sysOutLabel.setStyleSheet(u"background-color: rgb(30, 30, 30);")
+        self.sysOutLabel.setMinimumSize(QSize(150, 0))
+        self.sysOutLabel.setStyleSheet(u"")
+        self.sysOutLabel.setAlignment(Qt.AlignBottom|Qt.AlignLeading|Qt.AlignLeft)
 
         self.horizontalLayout_2.addWidget(self.sysOutLabel)
 
@@ -387,7 +380,6 @@ class Ui_Form(object):
         self.statusLabel.setText("")
         self.runPushButton.setText(QCoreApplication.translate("Form", u"Run", None))
         self.progressLabel.setText(QCoreApplication.translate("Form", u"0/0", None))
-        self.label_6.setText(QCoreApplication.translate("Form", u"Log:", None))
 #if QT_CONFIG(tooltip)
         self.sysOutLabel.setToolTip(QCoreApplication.translate("Form", u"Program output window", None))
 #endif // QT_CONFIG(tooltip)

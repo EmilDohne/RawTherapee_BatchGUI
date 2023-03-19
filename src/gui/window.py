@@ -1,10 +1,10 @@
-import os
-import sys
+import os, sys
 from PySide6 import QtWidgets, QtCore, QtUiTools, QtGui
 
-import core.generate_directories as crawl_dir
-import core.run
-import util.logger as logger
+import src.core.generate_directories as crawl_dir
+import src.core.run as run
+import src.gui.ui_helper as ui_helper
+import main
 
 # Holds a reference to the main UI instance
 UI_INST = None
@@ -13,12 +13,12 @@ class MainUI(QtWidgets.QWidget):
 
     def __init__(self, parent=None, ui_file=None):
         super().__init__(parent)
-        self.setWindowTitle("Raw Therapee Batch GUI")
-        self.setGeometry(0, 0, 600, 500)
+        self.setWindowTitle("RawTherapee Batch v{}".format(main.VERSION))
+        self.setGeometry(0, 0, 800, 500)
 
         self._input_folder: str = ""
         self._output_folder: str = ""
-        self._create_subfolder: bool = False
+        self._create_subfolder: bool = True
         self._processing_profile: str = ""
         self._raw_file_format: str = "3FR"
 
@@ -65,8 +65,15 @@ class MainUI(QtWidgets.QWidget):
         '''
         if not ui_path:
             ui_path = "{0}/main.ui".format(os.path.dirname(__file__))
-
-        file = QtCore.QFile(ui_path)
+        
+        try:
+            # If running in the context of the executable it creates an extra subfolder
+            # which needs to be accounted for
+            sys._MEIPASS
+            ui_path = "{0}/main.ui/main.ui".format(os.path.dirname(__file__))
+            file = QtCore.QFile(ui_helper.resource_path(ui_path))
+        except:
+            file = QtCore.QFile(ui_helper.resource_path(ui_path))
         file.open(QtCore.QFile.ReadOnly)
         file_loader = QtUiTools.QUiLoader()
         self.ui = file_loader.load(file, parentWidget=self)
@@ -122,4 +129,5 @@ class MainUI(QtWidgets.QWidget):
         self.ui.progressBar.setMaximum(len(dir_mapping))
         self.ui.progressBar.setValue(0)
 
-        core.run.rawtherapee_cli(dir_mapping, self._processing_profile)
+        # Store the worker thread so it doesnt get destroyed prematurely
+        self.worker_thread = run.rawtherapee_cli(dir_mapping, self._processing_profile)

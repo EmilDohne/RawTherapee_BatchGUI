@@ -1,6 +1,6 @@
 import os
 
-import util.logger
+import src.util.logger as logger
 
 def make_dir(directory: str, assert_is_empty = True):
     '''
@@ -14,7 +14,7 @@ def make_dir(directory: str, assert_is_empty = True):
 
     if assert_is_empty:
         if not len(os.listdir(directory)) == 0:
-            util.logger.log_warning("Directory {} is not empty, program will continue".format(directory))
+            logger.log_warning("Directory {} is not empty, program will continue".format(directory))
             
     return directory
         
@@ -24,7 +24,7 @@ def crawl(directory: str, raw_extension: str) -> list[str]:
     Crawls an input directory and returns all folders that contain the specified raw extension
     '''
     if not os.path.isdir(directory):
-        util.logger.log_error("directory {} is not a valid path".format(directory))
+        logger.log_error("directory {} is not a valid path".format(directory))
         return
     
     # List of all the paths that contain files with the raw_extension

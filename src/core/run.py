@@ -1,14 +1,57 @@
 '''
-Logic for getting the latest version of RawTherapee and then running the cli version of it
+Logic for getting the latest version of RawTherapee and then running the cli executable in it with the appropriate arguments
 '''
 import subprocess
 import os
+from PySide6 import QtCore
 
-import util.logger
-import gui.window
+import src.util.logger as logger
+import src.gui.window as main_window
+
 
 RAWTHERAPEE_INSTALL_LOC = r"C:\Program Files\RawTherapee"
 RAWTHERAPEE_CLI_EXECUTABLE = "rawtherapee-cli.exe"
+
+class RawtherapeeWorker(QtCore.QThread):
+
+    def __init__(self, parent,
+                 path_map: dict[str], 
+                 processing_profile: str,
+                 has_processing_profile: bool,
+                 rawtherapee_install: str) -> None:
+        super().__init__(parent)
+        self.path_map = path_map
+        self.processing_profile = processing_profile
+        self.has_processing_profile = has_processing_profile
+        self.rawtherapee_install = rawtherapee_install
+
+    def run(self):
+        for key in self.path_map:
+            logger.log_info("Began working on directory {}".format(key))
+            if self.has_processing_profile:
+                subprocess_call_list = [self.rawtherapee_install,
+                                        "-o",
+                                        self.path_map[key],
+                                        "-p",
+                                        self.processing_profile,
+                                        "-tz",
+                                        "-Y",
+                                        "-f",
+                                        "-c",
+                                        key]
+            else:
+                subprocess_call_list = [self.rawtherapee_install,
+                                        "-o",
+                                        self.path_map[key],
+                                        "-tz",
+                                        "-Y",
+                                        "-f",
+                                        "-c",
+                                        key]
+            subprocess.call(subprocess_call_list)
+            main_window.UI_INST.increment_progress_bar()
+        logger.log_success("Finished computing")
+
 
 def _find_latest_rawtherapee() -> str:
     '''
@@ -21,8 +64,7 @@ def _find_latest_rawtherapee() -> str:
     return os.path.join(RAWTHERAPEE_INSTALL_LOC, latest_version, RAWTHERAPEE_CLI_EXECUTABLE)
 
 
-def rawtherapee_cli(path_map: dict[str], processing_profile: str):
-    # TODO run this in a seperate QThread to not block the UI completely
+def rawtherapee_cli(path_map: dict[str], processing_profile: str) -> RawtherapeeWorker:
     # TODO this does not actually only process raw files, but all supported files
     '''
     Initiates a subprocess for each path pair in path_map with the processing profile if valid.
@@ -31,31 +73,15 @@ def rawtherapee_cli(path_map: dict[str], processing_profile: str):
     '''
     has_processing_profile = True
     if not processing_profile.endswith(".pp3") or not os.path.isfile(processing_profile):
-        util.logger.log_warning("Processing profile {} is not a valid profile file".format(processing_profile))
+        logger.log_warning("Processing profile {} is not a valid profile file".format(processing_profile))
         has_processing_profile = False
 
     rawtherapee_install = _find_latest_rawtherapee().removesuffix(".exe")
-    for key in path_map:
-        util.logger.log_info("Began working on directory {}".format(key))
-        if has_processing_profile:
-            subprocess_call_list = [rawtherapee_install,
-                                    "-o",
-                                    path_map[key],
-                                    "-p",
-                                    processing_profile,
-                                    "-tz",
-                                    "-Y",
-                                    "-f",
-                                    "-c",
-                                    key]
-        else:
-            subprocess_call_list = [rawtherapee_install,
-                                    "-o",
-                                    path_map[key],
-                                    "-tz",
-                                    "-Y",
-                                    "-f",
-                                    "-c",
-                                    key]
-        subprocess.call(subprocess_call_list)
-        gui.window.UI_INST.increment_progress_bar()
+
+    # Initialize a new QThread for the blocking operation and execute the code there,
+    # no return is necessary
+    worker_thread = RawtherapeeWorker(None, path_map, processing_profile, has_processing_profile, rawtherapee_install)
+    worker_thread.finished.connect(worker_thread.deleteLater)
+    worker_thread.start()
+
+    return worker_thread
