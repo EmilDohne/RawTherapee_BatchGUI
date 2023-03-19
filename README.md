@@ -5,7 +5,7 @@ I have recently found myself batch processing a large amount of data for the pro
 If you are looking to contribute to the codebase please read through [Contributing](#contributing). If you are looking to install the application and use it as is please read [Installation](#installation)
 
 ---
-![GUI Preview](docs/GUI_main.png)
+![GUI Preview](/docs/GUI_Main.png?raw=True)
 
 ---
 
