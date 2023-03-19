@@ -59,7 +59,7 @@ This can be useful if one wants to stitch the images later and create relevant s
 
 ## Processing Profile
 
-This specifies the processing file (*.pp3) to be used for the processing of the images. If this is empty or an invalid path it will revert to the defaults of RawTherapee
+This specifies the processing file (*.pp3) to be used for the processing of the images. If this is empty it will revert to the defaults of RawTherapee
 
 ## Raw File Format
 
