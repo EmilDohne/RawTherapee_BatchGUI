@@ -2,6 +2,8 @@
 
 I have recently found myself batch processing a large amount of data for the processing of HDRIs using [RawTherapee](https://www.rawtherapee.com/). While it is possible to batch submit files into the internal queue this becomes rather tedious when dealing with large datasets spread over multiple folders. ***RawTherapee Batch*** aims to simplify this and abstracts away the interaction with *rawtherapee_cli.exe*.
 
+Please read through the [documentation](/docs/DOCUMENTATION.md) before using the application.
+
 If you are looking to contribute to the codebase please read through [Contributing](#contributing). If you are looking to install the application and use it as is please read [Installation](#installation)
 
 ---
