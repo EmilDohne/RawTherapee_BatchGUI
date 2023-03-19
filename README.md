@@ -9,6 +9,9 @@ If you are looking to contribute to the codebase please read through [Contributi
 
 ---
 
+## Pre-Requisites
+
+You must have [RawTherapee](https://www.rawtherapee.com/downloads/) installed on your system for this program to run correctly
 
 ## Features
 
