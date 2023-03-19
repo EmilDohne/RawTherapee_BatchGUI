@@ -80,8 +80,11 @@ def rawtherapee_cli(path_map: dict[str], processing_profile: str) -> Rawtherapee
     #TODO add the ability to modify this
     '''
     has_processing_profile = True
-    if not processing_profile.endswith(".pp3") or not os.path.isfile(processing_profile):
-        logger.log_warning("Processing profile {} is not a valid profile file".format(processing_profile))
+    if processing_profile != "":
+        if not processing_profile.endswith(".pp3") or not os.path.isfile(processing_profile):
+            logger.log_warning("Processing profile {} is not a valid profile file".format(processing_profile))
+            return
+    else:
         has_processing_profile = False
 
     rawtherapee_install = _find_latest_rawtherapee().removesuffix(".exe")
